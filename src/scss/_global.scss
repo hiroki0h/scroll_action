@@ -1,0 +1,43 @@
+@charset "utf-8";
+
+#wrapper {
+    overflow: hidden;
+    h1 {        
+        font-size: 5rem;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 10vh;
+        color: #fff;
+    }
+    section {
+        height: 100vh;
+    }
+    .scroll-section {
+        padding-top: 30vh;
+        position: relative;
+    }
+    .sticky-elem {
+        position: fixed;
+        top: 50%;
+        left: 0;
+    }
+    .main-message {
+        width: 100%;
+        padding: 0 25%;
+        font-size: 3rem;
+        font-weight: bold;
+        color: #fff;
+        align-items: center;
+        justify-content: center;
+        display: flex;        
+    }
+}
+#scene-0 {
+    background: #100a0a;
+    .message-a {}
+    .message-b {}
+    .message-c {}
+}
+#scene-1 {}
+#scene-2 {}
+
