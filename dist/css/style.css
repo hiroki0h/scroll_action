@@ -1,4 +1,4 @@
-/*! Build Date: 2020-11-26 14:47:36 */
+/*! Build Date: 2020-12-3 14:38:38 */
 @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap);
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -151,6 +151,10 @@ img {
 #wrapper .scroll-section {
   padding-top: 30vh;
   position: relative;
+}
+
+#wrapper .scroll-section .main-message {
+  opacity: 0;
 }
 
 #wrapper .sticky-elem {

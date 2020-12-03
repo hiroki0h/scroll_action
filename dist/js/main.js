@@ -1,4 +1,4 @@
-/*! Build Date: 2020-11-26 14:47:36 */
+/*! Build Date: 2020-12-3 14:38:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10990,24 +10990,51 @@ __webpack_require__.r(__webpack_exports__);
 
   var currentScene = 0; // 현재 활성화 된 씬
 
+  var prevScrollHeight = 0; // 현재 스크롤 위치보다 이전에 있는 섹션들 높이 합
+
+  var sceneChange = false; // 씬이 변경될 때 활성화
+
   var sceneInfo = [{
     type: 'sticky',
-    heightNum: 5,
+    heightNum: 3,
     scrollHeight: 0,
     objs: {
       container: $('#scene-0'),
       messageA: $('#scene-0 .main-message.message-a'),
-      messageB: $('#scene-0 .main-message.message-b'),
-      messageC: $('#scene-0 .main-message.message-c')
+      messageB: $('#scene-0 .main-message.message-b')
     },
     values: {
       messageA_opacity_in: [0, 1, {
         start: 0.1,
         end: 0.2
       }],
+      messageA_opacity_out: [1, 0, {
+        start: 0.25,
+        end: 0.35
+      }],
+      messageA_translateX_in: [-10, 0, {
+        start: 0.1,
+        end: 0.2
+      }],
+      messageA_translateX_out: [0, 10, {
+        start: 0.25,
+        end: 0.35
+      }],
       messageB_opacity_in: [0, 1, {
         start: 0.4,
         end: 0.5
+      }],
+      messageB_opacity_out: [1, 0, {
+        start: 0.55,
+        end: 0.65
+      }],
+      messageB_translateY_in: [-15, 0, {
+        start: 0.4,
+        end: 0.5
+      }],
+      messageB_translateY_out: [0, 15, {
+        start: 0.55,
+        end: 0.65
       }]
     }
   }]; // 2
@@ -11019,24 +11046,83 @@ __webpack_require__.r(__webpack_exports__);
     }); // 현재 스크롤높이
 
     yOffset = window.pageYOffset;
-    console.log(yOffset);
+    console.log('yOffset', yOffset);
   }; // 4
 
 
-  var calcValues = function calcValues() {
-    var scrollHeight = sceneInfo[currentScene].scrollHeight; // 씬 처음과 끝을 비율로 만들기
-    // 내가 보고 있는 구간 
+  var calcValues = function calcValues(values, currentYOffset) {
+    var returnValue;
+    var scrollHeight = sceneInfo[currentScene].scrollHeight; // 모션 시작 offset
+
+    var partScrollStart = values[2].start * scrollHeight; // 모션 끝 offset
+
+    var partScrollEnd = values[2].end * scrollHeight; // 모션 높이
+
+    var partScrollHeight = partScrollEnd - partScrollStart;
+
+    if (currentYOffset >= partScrollStart && currentYOffset <= partScrollEnd) {
+      // 모션영역 시작과 끝 사이에서 do something
+      // 영역 들어갔을때 내가 있는 곳에서의 비율
+      //  messageA_opacity_in - 내 offset은 300 - 시작은 290.7 -> 9.3 / 290.7 * ( 1 - 0 )        +    0
+      returnValue = (currentYOffset - partScrollStart) / partScrollHeight * (values[1] - values[0]) + values[0]; //              0.0319917...
+    } else if (currentYOffset < partScrollStart) {
+      // 시작 전
+      returnValue = values[0];
+    } else if (currentYOffset > partScrollEnd) {
+      // 끝나고 난 뒤
+      returnValue = values[1];
+    }
+
+    return returnValue;
   }; // 3    
 
 
-  var playAnimation = function playAnimation() {};
+  var playAnimation = function playAnimation() {
+    var objs = sceneInfo[currentScene].objs;
+    var values = sceneInfo[currentScene].values; // 현재 씬에서의 스크롤 높이
+    // yOffset - 현재 스크롤 높이 저장
+
+    var currentYOffset = yOffset - prevScrollHeight;
+    var scrollHeight = sceneInfo[currentScene].scrollHeight;
+    var scrollRatio = currentYOffset / scrollHeight; // 현재 씬에서 스크롤 높이만큼의 비율
+
+    if (scrollRatio <= 0.22) {
+      // 모션 들어갔다
+      objs.messageA.css({
+        'opacity': calcValues(values.messageA_opacity_in, currentYOffset),
+        'transform': "translate3d(".concat(calcValues(values.messageA_translateX_in, currentYOffset), "%, -50%, 0)")
+      });
+    } else {
+      objs.messageA.css({
+        // 모션 나오기
+        'opacity': calcValues(values.messageA_opacity_out, currentYOffset),
+        'transform': "translate3d(".concat(calcValues(values.messageA_translateX_out, currentYOffset), "%, -50%, 0)")
+      });
+    }
+
+    if (scrollRatio <= 0.52) {
+      objs.messageB.css({
+        'opacity': calcValues(values.messageB_opacity_in, currentYOffset),
+        'transform': "translate3d(0, ".concat(-50 + calcValues(values.messageB_translateY_in, currentYOffset), "%, 0)")
+      });
+    } else {
+      objs.messageB.css({
+        'opacity': calcValues(values.messageB_opacity_out, currentYOffset),
+        'transform': "translate3d(0, ".concat(-50 + calcValues(values.messageB_translateY_out, currentYOffset), "%, 0)")
+      });
+    }
+  };
+
+  var scrollLoop = function scrollLoop() {
+    playAnimation();
+  };
 
   window.addEventListener('scroll', function () {
     yOffset = window.pageYOffset;
+    scrollLoop();
   });
   window.addEventListener('load', function () {
-    setLayout();
-    playAnimation(); //        console.log(sceneInfo[0]);
+    setLayout(); //        console.log(sceneInfo[0]);
   });
   window.addEventListener('resize', setLayout); //}());
 })(jquery__WEBPACK_IMPORTED_MODULE_0___default.a);
