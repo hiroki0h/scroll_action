@@ -28,20 +28,45 @@ import $ from 'jquery';
                 messageB_translateY_in: [-15, 0, { start: 0.4, end: 0.5 }],
                 messageB_translateY_out: [0, 15, { start: 0.55, end: 0.65 }],
             }
+        },
+        {
+            type: 'normal',
+            height: 3,
+            scrollHeight: 0,
+            objs: {
+                container: $('#scene-1'),
+                description: $('#scene-1 .description'),
+            },
+            values: {
+                background: [0, 300],
+            },
+
         }
     ];
     
     // 2
     const setLayout = () => {
-        sceneInfo[0].scrollHeight = sceneInfo[0].heightNum * window.innerHeight;
-        
-        sceneInfo[0].objs.container.css({
-            'height': sceneInfo[0].scrollHeight  
-        });
+        // type - normal은 높이값 설정이 필요없음 - 분기태우기
+        for(let i = 0; i < sceneInfo.length; i++){
+            if(sceneInfo[i].type === 'sticky'){
+                sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
+            }else if(sceneInfo[i].type === 'normal'){
+                sceneInfo[i].objs.container.css({
+                    'height': 'auto'
+                });
+            }
+            sceneInfo[i].scrollHeight = sceneInfo[i].objs.container.innerHeight();
+        }
         
         // 현재 스크롤높이
         yOffset = window.pageYOffset;
-        console.log('yOffset',yOffset);
+
+
+        // 현재 currentScene 구하기
+        for( let i = 0; i <sceneInfo.length; i++ ){
+
+        }
+        // console.log('yOffset',yOffset);
     };
     
     // 4
@@ -62,7 +87,6 @@ import $ from 'jquery';
             //  messageA_opacity_in - 내 offset은 300 - 시작은 290.7 -> 9.3 / 290.7 * ( 1 - 0 )        +    0
             returnValue = ( currentYOffset - partScrollStart ) / partScrollHeight * ( values[1] - values[0] ) + values[0];
             //              0.0319917...
-
         }else if(currentYOffset < partScrollStart){
             // 시작 전
             returnValue = values[0];
@@ -86,6 +110,13 @@ import $ from 'jquery';
 
         const scrollHeight = sceneInfo[currentScene].scrollHeight;
         const scrollRatio = currentYOffset / scrollHeight; // 현재 씬에서 스크롤 높이만큼의 비율
+
+        // type - normal은 start, end 값이 없어 분기 태우기
+        // switch(){
+        //
+        // }
+        console.log('currentScene',currentScene);
+
         if( scrollRatio <= 0.22 ){ // 모션 들어갔다
             objs.messageA.css({
                 'opacity': calcValues(values.messageA_opacity_in, currentYOffset),
@@ -111,7 +142,15 @@ import $ from 'jquery';
     };
         
     const scrollLoop = () => {
+        // 현재 씬 구하기 - currentScene
+        prevScrollHeight = 0;
+        for(let i = 0; i < currentScene; i++){
+            prevScrollHeight - sceneInfo[i].scrollHeight;
+       // console.log('prevScrollHeight',prevScrollHeight);
+       console.log('sceneInfo[i]',sceneInfo[i]);
+        }
         playAnimation();
+        console.log('prevScrollHeight',prevScrollHeight);
     };
         
     window.addEventListener('scroll', () => {

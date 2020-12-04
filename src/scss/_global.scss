@@ -41,6 +41,22 @@
     .message-b {}
     .message-c {}
 }
-#scene-1 {}
+#scene-1 {
+
+    .description{
+        max-width: 800px;
+        margin:0 auto;
+        font-size: 1.8rem;
+        line-height: 2.4;
+        font-weight: bold;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-image: linear-gradient(150deg, rgb(15, 68, 167) 100%, rgb(217, 90, 90) 200%, rgb(76, 167, 84) 300%);
+        @media (max-width: 768px){
+            font-size: 4vw;
+            padding: 0 1em;
+        }
+    }
+}
 #scene-2 {}
 

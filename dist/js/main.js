@@ -1,4 +1,4 @@
-/*! Build Date: 2020-12-3 14:38:38 */
+/*! Build Date: 2020-12-4 16:32:11 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11037,16 +11037,38 @@ __webpack_require__.r(__webpack_exports__);
         end: 0.65
       }]
     }
+  }, {
+    type: 'normal',
+    height: 3,
+    scrollHeight: 0,
+    objs: {
+      container: $('#scene-1'),
+      description: $('#scene-1 .description')
+    },
+    values: {
+      background: [0, 300]
+    }
   }]; // 2
 
   var setLayout = function setLayout() {
-    sceneInfo[0].scrollHeight = sceneInfo[0].heightNum * window.innerHeight;
-    sceneInfo[0].objs.container.css({
-      'height': sceneInfo[0].scrollHeight
-    }); // 현재 스크롤높이
+    // type - normal은 높이값 설정이 필요없음 - 분기태우기
+    for (var i = 0; i < sceneInfo.length; i++) {
+      if (sceneInfo[i].type === 'sticky') {
+        sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
+      } else if (sceneInfo[i].type === 'normal') {
+        sceneInfo[i].objs.container.css({
+          'height': 'auto'
+        });
+      }
 
-    yOffset = window.pageYOffset;
-    console.log('yOffset', yOffset);
+      sceneInfo[i].scrollHeight = sceneInfo[i].objs.container.innerHeight();
+    } // 현재 스크롤높이
+
+
+    yOffset = window.pageYOffset; // 현재 currentScene 구하기
+
+    for (var _i = 0; _i < sceneInfo.length; _i++) {} // console.log('yOffset',yOffset);
+
   }; // 4
 
 
@@ -11085,6 +11107,12 @@ __webpack_require__.r(__webpack_exports__);
     var currentYOffset = yOffset - prevScrollHeight;
     var scrollHeight = sceneInfo[currentScene].scrollHeight;
     var scrollRatio = currentYOffset / scrollHeight; // 현재 씬에서 스크롤 높이만큼의 비율
+    // type - normal은 start, end 값이 없어 분기 태우기
+    // switch(){
+    //
+    // }
+
+    console.log('currentScene', currentScene);
 
     if (scrollRatio <= 0.22) {
       // 모션 들어갔다
@@ -11114,7 +11142,17 @@ __webpack_require__.r(__webpack_exports__);
   };
 
   var scrollLoop = function scrollLoop() {
+    // 현재 씬 구하기 - currentScene
+    prevScrollHeight = 0;
+
+    for (var i = 0; i < currentScene; i++) {
+      prevScrollHeight - sceneInfo[i].scrollHeight; // console.log('prevScrollHeight',prevScrollHeight);
+
+      console.log('sceneInfo[i]', sceneInfo[i]);
+    }
+
     playAnimation();
+    console.log('prevScrollHeight', prevScrollHeight);
   };
 
   window.addEventListener('scroll', function () {
@@ -11123,6 +11161,14 @@ __webpack_require__.r(__webpack_exports__);
   });
   window.addEventListener('load', function () {
     setLayout(); //        console.log(sceneInfo[0]);
+    // $('.password .img_area img').src();
+
+    function asd() {}
+
+    ;
+    $('.input').on('click', function () {
+      console.log('asd');
+    });
   });
   window.addEventListener('resize', setLayout); //}());
 })(jquery__WEBPACK_IMPORTED_MODULE_0___default.a);

@@ -1,4 +1,4 @@
-/*! Build Date: 2020-12-3 14:38:38 */
+/*! Build Date: 2020-12-4 16:32:11 */
 @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap);
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -176,6 +176,24 @@ img {
 
 #scene-0 {
   background: #100a0a;
+}
+
+#scene-1 .description {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.8rem;
+  line-height: 2.4;
+  font-weight: bold;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(150deg, #0f44a7 100%, #d95a5a 200%, #4ca754 300%);
+}
+
+@media (max-width: 768px) {
+  #scene-1 .description {
+    font-size: 4vw;
+    padding: 0 1em;
+  }
 }
 
 
